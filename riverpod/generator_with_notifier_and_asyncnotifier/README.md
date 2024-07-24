@@ -1,16 +1,36 @@
 # generator_with_notifier_and_asyncnotifier
 
-A new Flutter project.
+https://codewithandrea.com/articles/flutter-riverpod-async-notifier/
 
-## Getting Started
+## セットアップ
 
-This project is a starting point for a Flutter application.
+以下のコマンドを実行して必要なパッケージをインストールする。
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+flutter pub add flutter_riverpod
+flutter pub add riverpod_annotation
+flutter pub add dev:riverpod_generator
+flutter pub add dev:build_runner
+flutter pub add dev:custom_lint
+flutter pub add dev:riverpod_lint
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## generatorとは
+
+riverpod_generatorのこと。
+
+https://pub.dev/packages/riverpod_generator
+
+Providerの生成を自動で行ってくれる。
+実行にはbuild_runnerを利用する。
+
+generatorツールの起動は以下のコマンドを実行する。
+
+```sh
+flutter pub run build_runner watch
+```
+
+- Notifierとは
+- AsyncNotifierとは
