@@ -15,7 +15,17 @@ flutter pub add dev:custom_lint
 flutter pub add dev:riverpod_lint
 ```
 
+runApp()の引数をProviderScopeでラップする。
 
+```dart
+void main() {
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
+}
+```
 
 ## generatorとは
 
@@ -32,5 +42,182 @@ generatorツールの起動は以下のコマンドを実行する。
 flutter pub run build_runner watch
 ```
 
-- Notifierとは
-- AsyncNotifierとは
+もしバックグラウンドでコマンドを実行しておきたい場合はオプションをつける。
+
+```sh
+flutter pub run build_runner watch -d
+```
+
+## Notifier, AsyncNotifierとは
+
+StateNotifierの代替となるクラス。以下の特徴がある。
+
+- 簡単に非同期初期化ができる
+- refを使わなくて良い
+- Providerを手動で定義しなくて良い
+
+### StateProvider vs NotifierProvider
+
+#### StateProvider:
+シンプルな値には向いており、複雑なロジックには不向き。
+
+```dart
+// Providerの定義
+final Providerインスタンス名 = StateProvider<状態のデータ型>((ref){
+    // 初期値は状態のデータ型である必要がある
+    return 初期値;
+});
+
+// 状態の読み取り
+ref.watch(Providerインスタンス名)
+
+// 状態の変更(例. インクリメント)
+ref.read(Providerインスタンス名.notifier).state++
+```
+
+### Notifier, NotifierProvider
+StateProviderでできることは全てできる。
+Notifierにはメソッドが定義でき、複雑な状態も扱いやすい。
+
+```dart
+class Notifierクラス名 extends Notifier<状態のデータ型> {
+  @override
+  build() {
+    // 初期値
+    // 状態のデータ型である必要がある
+    return 初期値;
+  }
+
+  // stateを変更して状態を更新するメソッド
+  void increment() {
+    // stateがNotiferが扱う状態を表す
+    state++;
+  }
+}
+
+// 状態の読み取り
+// 状態の読み取り
+ref.watch(Providerインスタンス名)
+
+// 状態の変更(例. インクリメント)
+ref.read(Providerインスタンス名.notifier).state++
+ref.read(Providerインスタンス名.notifier).increment()
+
+```
+
+## Simple Counter
+
+Notifier、NotifierProviderを使ったデモ。
+
+### StateProviderを使った例
+
+StateProviderはシンプルな値を扱う際便利。
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 基本となるStateProvider
+final counterProvider = StateProvider<int>((ref) => 0);
+
+class CounterWidget extends ConsumerWidget {
+  const CounterWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // providerの参照
+    final counter = ref.watch(counterProvider);
+
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          // provider取得した値を表示
+          child: Text('$counter'),
+          // providerのstateを更新
+          onPressed: () => ref.read(counterProvider.notifier).state++,
+        ),
+      ),
+    );
+  }
+}
+```
+
+しかしバリデーションや複雑なロジックを実装する際に不便。
+
+### NotifierProviderを使った例
+
+そこでNotiferを使うとこのようなケースに簡単に対応できる。
+CounterWidget側は変更しなくてもOK。
+
+```dart
+
+// Notifierを使った例
+class Counter extends Notifier<int> {
+  @override
+  build() {
+    // 初期値
+    // Notifier<データ型>のデータ型の値をreturnする
+    return 0;
+  }
+
+  // stateを変更して状態を更新するメソッド
+  void increment() {
+    // stateがNotiferが扱う状態を表す
+    state++;
+  }
+}
+
+final counterProvider = NotifierProvider<Counter, int>(() {
+  return Counter();
+});
+
+// 以下のように書いても同じ意味
+// final counterProvider =
+//     NotifierProvider<Counter, int>(Counter.new);
+
+```
+
+Notifierで定義したincrement()を使用する場合、次のように書く。
+
+```dart
+onPressed: () => ref.read(counterProvider.notifier).increment()
+```
+
+### NotifierProviderを自動生成する
+
+上記のCounterの例を用いる。
+もし自動生成で同じNotifierProviderを生成する場合は、
+以下のように記述する。
+この時 `flutter pub run build_runner watch`を実行しておく。
+
+counter.dart:
+```dart
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+// ファイル名.g.dartでpart宣言する
+part 'counter.g.dart';
+
+// @riverpodアノテーションをつける
+@riverpod
+// _$クラス名でextendsする
+class Counter extends _$Counter {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void increment() {
+    // 状態を読み取る場合はstate
+    state++;
+  }
+}
+```
+このコードを保存するとcounter.g.dartファイルが
+counter.dartと同じディレクトリに生成される。
+
+自動生成されたProviderを使用するには
+`import counter.dart`をする。
+
+## Auth Controller
+
+AsyncNotifer、AsyncNotiferProviderを使ったデモ。
