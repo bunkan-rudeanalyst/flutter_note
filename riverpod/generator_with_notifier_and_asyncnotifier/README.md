@@ -105,6 +105,41 @@ ref.read(Providerインスタンス名.notifier).increment()
 
 ```
 
+### NotifierProviderの自動生成
+
+ターミナルで以下をまず実行しておく。
+
+```sh
+flutter pub run build_runner watch
+```
+
+自動生成するための材料となるNotifierクラスを定義する。
+
+```dart
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+// ファイル名.g.dartでpart宣言する
+part 'ファイル名.g.dart';
+
+@riverpod
+class Notifierクラス名 extends _$Notifierクラス名{
+    @override
+    データ型 build(){
+        return 初期値;
+    }
+
+    // メソッド定義
+    void メソッド名(){
+        // stateで管理している状態にアクセス
+        // ex. state++
+        // ex. state = [1,2,3,4,...]
+        // ex. state = state * 2
+    }
+}
+
+```
+
+
 ## サンプルアプリ:Simple Counter
 
 Notifier、NotifierProviderを使ったデモ。
