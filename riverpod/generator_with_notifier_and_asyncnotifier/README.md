@@ -56,9 +56,9 @@ StateNotifierの代替となるクラス。以下の特徴がある。
 - refを使わなくて良い
 - Providerを手動で定義しなくて良い
 
-### StateProvider vs NotifierProvider
+## StateProvider vs NotifierProvider
 
-#### StateProvider:
+### StateProvider:
 シンプルな値には向いており、複雑なロジックには不向き。
 
 ```dart
@@ -75,7 +75,7 @@ ref.watch(Providerインスタンス名)
 ref.read(Providerインスタンス名.notifier).state++
 ```
 
-### Notifier, NotifierProvider
+### Notifier, NotifierProvider:
 StateProviderでできることは全てできる。
 Notifierにはメソッドが定義でき、複雑な状態も扱いやすい。
 
@@ -105,7 +105,7 @@ ref.read(Providerインスタンス名.notifier).increment()
 
 ```
 
-## Simple Counter
+## サンプルアプリ:Simple Counter
 
 Notifier、NotifierProviderを使ったデモ。
 
@@ -218,6 +218,6 @@ counter.dartと同じディレクトリに生成される。
 自動生成されたProviderを使用するには
 `import counter.dart`をする。
 
-## Auth Controller
+## サンプルアプリ:Auth Controller
 
 AsyncNotifer、AsyncNotiferProviderを使ったデモ。
