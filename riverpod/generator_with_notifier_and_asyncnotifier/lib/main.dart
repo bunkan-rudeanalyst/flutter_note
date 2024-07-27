@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:generator_with_notifier_and_asyncnotifier/async_notifier_counter/async_counter_page.dart';
 import 'package:generator_with_notifier_and_asyncnotifier/async_value_practice/json_fetch_page.dart';
 import 'package:generator_with_notifier_and_asyncnotifier/simple_counter/simple_counter.dart';
 
@@ -54,6 +55,16 @@ class HomePage extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => const JsonFetchPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("async counter"),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const AsyncCounterPage(),
                 ),
               );
             },

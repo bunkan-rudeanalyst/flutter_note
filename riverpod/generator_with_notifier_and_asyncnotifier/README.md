@@ -390,3 +390,127 @@ state = await AsyncValue.guard(() async {
 少し短く書ける。ただしエラー時にStateNotifier側で
 何かしらの追加処理を行いたい場合は`AsyncValue.guard()`
 ではない方法で書く必要がある。
+
+### AsyncValueとAsyncData, AsyncLoading, AsyncErrorの違い
+
+## AsyncNotifierを用いた非同期カウンターアプリ
+
+`AsyncNotifier`を配信するproviderを定義する。
+
+```dart
+
+import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class AsyncCounter extends AutoDisposeAsyncNotifier<int> {
+  // AsyncNotifierクラスないでは
+  // どこでもrefが参照できる
+  @override
+  FutureOr<int> build() {
+    // 初期値
+    return 0;
+  }
+
+  Future<void> increment() async {
+    state = const AsyncLoading();
+    state = await Future.delayed(
+      // インクリメントするたびに1秒wait
+      // 1秒間loading状態になる
+      const Duration(seconds: 1),
+      () => AsyncValue.data(state.value! + 1),
+    );
+  }
+}
+
+// providerインスタンス
+// autoDispose: 全てのproviderのリスナーが削除された際、自動で状態をリセットする
+final asyncCounterProvider =
+    AsyncNotifierProvider.autoDispose<AsyncCounter, int>(AsyncCounter.new);
+
+```
+
+`autoDispose`をつけることで、providerのリスナーが
+全て削除された時に状態をリセットするようにする。
+`autoDispose`を使用する場合は`AutoDisposeAsyncNotifier`を継承する必要がある。
+
+providerを使用する方法は次のとおり。
+
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:generator_with_notifier_and_asyncnotifier/async_notifier_counter/async_counter.dart';
+
+class AsyncCounterPage extends ConsumerWidget {
+  const AsyncCounterPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // AsyncNotifierの値watch
+    final counter = ref.watch(asyncCounterProvider);
+    return Scaffold(
+      appBar: AppBar(title: const Text('async counter')),
+      body: Center(
+        // AsyncNotifierの値を表示
+        child: counter.when(
+          data: (value) =>
+              Text(value.toString(), style: TextStyle(fontSize: 60)),
+          error: (_, __) => const Text("error"),
+          loading: () => const CircularProgressIndicator(),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // AsyncNotifierのメソッド呼び出し
+          ref.read(asyncCounterProvider.notifier).increment();
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+```
+
+### riverpod_generatorを用いてAsyncNotifierを生成する
+
+generated_async_counter.g.dart:
+```dart
+// 1. import this
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+// 2. declare a part file
+part 'generated_async_counter.g.dart';
+
+@riverpod
+class AsyncCounter extends _$AsyncCounter {
+  @override
+  // 初期値が同期的に取得できる場合はFutureOrを使う
+  // 非同期の場合はFuture<データ型>で定義でも良いし、FutureOrのままでもOK
+  FutureOr<int> build() async {
+    // 初期値をreturn
+    return await Future.delayed(Duration(seconds: 1), () => 0);
+  }
+
+  Future<void> increment() async {
+    state = const AsyncValue.loading();
+    await Future.delayed(Duration(seconds: 1), () {
+      state = AsyncValue.data(state.value! + 1);
+    });
+  }
+}
+```
+今回は使用していないが、`@riverpod`を用いた例の
+`AsyncCounter`内では`ref`が参照できる。
+
+そしてriverpod_generatorを実行する。
+
+```sh
+flutter pub run build_runner watch
+```
+
+すると自動でproviderが生成される。
+
+## AsyncNotifierをユニットテストする
+
+`AsyncCounter`クラスをテストする。
