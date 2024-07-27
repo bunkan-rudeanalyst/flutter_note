@@ -15,7 +15,7 @@ flutter pub add dev:custom_lint
 flutter pub add dev:riverpod_lint
 ```
 
-runApp()の引数をProviderScopeでラップする。
+providerを参照したいウィジェットをProviderScopeでラップする。
 
 ```dart
 void main() {
@@ -27,14 +27,12 @@ void main() {
 }
 ```
 
-## generatorとは
+## generator
 
-riverpod_generatorのこと。
+riverpod_generatorがProviderの生成を自動で行ってくれる。
+実行にはbuild_runnerを利用する。
 
 https://pub.dev/packages/riverpod_generator
-
-Providerの生成を自動で行ってくれる。
-実行にはbuild_runnerを利用する。
 
 generatorツールの起動は以下のコマンドを実行する。
 
@@ -42,7 +40,7 @@ generatorツールの起動は以下のコマンドを実行する。
 flutter pub run build_runner watch
 ```
 
-もしバックグラウンドでコマンドを実行しておきたい場合はオプションをつける。
+もしバックグラウンドでコマンドを実行したい場合`-d`オプションをつける。
 
 ```sh
 flutter pub run build_runner watch -d
@@ -50,11 +48,11 @@ flutter pub run build_runner watch -d
 
 ## Notifier, AsyncNotifierとは
 
-StateNotifierの代替となるクラス。以下の特徴がある。
+StateNotifierの代替となるクラス。
+以下の特徴がある。
 
 - 簡単に非同期初期化ができる
-- refを使わなくて良い
-- Providerを手動で定義しなくて良い
+- `riverpod_generator`を使うとProviderを自動で作成可能
 
 ## StateProvider vs NotifierProvider
 
