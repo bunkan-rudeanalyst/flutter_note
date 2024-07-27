@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:generator_with_notifier_and_asyncnotifier/async_value_practice/json_fetch_page.dart';
 import 'package:generator_with_notifier_and_asyncnotifier/simple_counter/simple_counter.dart';
 
 void main() {
@@ -43,6 +44,16 @@ class HomePage extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => CounterWidget(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("json fetch"),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const JsonFetchPage(),
                 ),
               );
             },
