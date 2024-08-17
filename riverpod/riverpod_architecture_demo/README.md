@@ -83,6 +83,63 @@ https://pub.dev/packages/freezed
 
 https://codewithandrea.com/articles/flutter-repository-pattern/
 
+## Presentation
+
+PresentationレイヤーのControllerについて説明する。
+Controllerは以下の役割を持つ。
+
+- ビジネスロジックの管理
+- ウィジェットの状態管理
+- Dataとのやりとり管理
+
+PresentationはMVVMのViewに相当する。
+基本的には`AsyncNotifier`を用いてControllerを構成する。
+
+前述した通り、Presentationには以下の3要素がある。
+
+- Widget
+- State
+- Controller
+
+それぞれの関係は次のようになる。
+
+- Widget
+  - Stateの状態を観察してUIに反映
+  - ユーザーが何かアクションをした場合、それをControllerに伝える
+- State
+  - Widgetから観察される
+  - 更新はControllerのみ可能
+- Controller
+  - ユーザーからのアクションをWidgetから受け取る
+  - Stateを変更する
+  - ApplicationまたはDataのクラスを呼び出す
+
+例えば簡単なTodoアプリを考える。
+この時、各要素は次のようになる。
+
+- Widget
+  - TodoListPage
+- State
+  - AsyncNotifierを継承したTodoListPageControllerから取得する値
+  - AsyncValue
+- Controller
+  - AsyncNotifierを継承
+  - 初期値はDataのRepositoryから取得する（非同期）
+  - get/update/deleteを画面構成に合わせて用意する
+- Data
+  - TodosRepository
+  - TodoをList型で保持
+  - Controllerのみとやりとりをする
+  - テストを簡単にするには、Repositoryをabstractで抽象クラスとして定義する
+
+TodoListPageではControllerをref.watch()で参照し、AsyncValueの状態に応じて.whenで表示を切り替える。
+実際にTodoのリストを保持しているのはTodosRepository。Controllerには保持しない。
+
+この構成のTodoアプリはサンプルとして実際に作成したので、実装を確認する場合はlibは以下のコードを参照。
+
+## Application
+## Domain
+## Data
 
 ## 参照
 
