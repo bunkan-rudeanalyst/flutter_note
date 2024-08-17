@@ -1,4 +1,4 @@
-import 'package:riverpod_architecture_demo/domain/model/todo.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/domain/model/todo.dart';
 
 class TodosRepository {
   List<Todo> todos = [];

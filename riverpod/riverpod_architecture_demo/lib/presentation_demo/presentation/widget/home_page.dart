@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_architecture_demo/presentation/widget/todo_list_page.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/presentation/widget/todo_list_page.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});

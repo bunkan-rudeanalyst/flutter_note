@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_architecture_demo/presentation/widget/home_page.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/presentation/widget/home_page.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});

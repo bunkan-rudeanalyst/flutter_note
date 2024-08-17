@@ -141,6 +141,19 @@ TodoListPageではControllerをref.watch()で参照し、AsyncValueの状態に�
 ## Domain
 ## Data
 
+アプリ内で使用するデータと外部のデータソース（API、データベース...）間の仲介をする。
+
+なのでアプリ内からデータへアクセスする際にはRepositoryクラスにアクセスするし、外部から取得したデータはRepositoryでModelで定義されているドメインデータ型に変換される。
+
+また外部のデータソースに変更が生じた場合も、Repositoryの変更のみで修正が完了する。
+
+### Repositoryクラスの抽象化
+
+Repositoryクラスは抽象化に非常に適している。
+適している理由は「テストを簡単に実装できる」ため。
+
+
+
 ## 参照
 
 https://codewithandrea.com/articles/flutter-app-architecture-riverpod-introduction/

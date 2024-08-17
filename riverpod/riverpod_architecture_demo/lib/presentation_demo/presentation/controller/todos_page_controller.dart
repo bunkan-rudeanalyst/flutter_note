@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_architecture_demo/data/repository/todos_repository_provider.dart';
-import 'package:riverpod_architecture_demo/domain/model/todo.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/data/repository/todos_repository_provider.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/domain/model/todo.dart';
 
 class TodoListPageController extends AsyncNotifier<List<Todo>> {
   @override

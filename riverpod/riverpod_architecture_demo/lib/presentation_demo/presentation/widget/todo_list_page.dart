@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_architecture_demo/domain/model/todo.dart';
-import 'package:riverpod_architecture_demo/presentation/controller/todos_page_controller.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/domain/model/todo.dart';
+import 'package:riverpod_architecture_demo/presentation_demo/presentation/controller/todos_page_controller.dart';
 
 class TodoListPage extends ConsumerWidget {
   const TodoListPage({super.key});
